@@ -1,8 +1,17 @@
-package GUI;
+package Jeu;
 
 import Partie.Temps;
 import Partie.Partie;
 import Partie.Joueur;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import java.io.File;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import java.util.ArrayList;
 
@@ -29,6 +38,21 @@ public class Menu {
      */
     public void sauvegarderPartie(Partie partie) {
         
+        try {
+                
+		File file = new File("src/Local_Storage/sauvegardes.xml");
+		JAXBContext jaxbContext = JAXBContext.newInstance(Partie.class);
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+		// output pretty printed
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		jaxbMarshaller.marshal(partie, file);
+		jaxbMarshaller.marshal(partie, System.out);
+
+	      } catch (JAXBException e) {
+		e.printStackTrace();
+	      }
     }
     
     /**

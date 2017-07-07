@@ -76,15 +76,15 @@ public class NewMainTest {
        // FACILE
        AI testFacile = new AI(0);
        Iterator<Map.Entry<Point, Integer>> it ;
-       // Test Case 1
+       // Test RandomMove 1
        Grille grilleCase1 = new Grille();
        Point pointRandom = testFacile.makeMove(grilleCase1);
        if(grilleCase1.getGrille()[pointRandom.getRangee()][pointRandom.getColonne()].getStatut() == 0){
-            System.out.println("Test Case 1 : REUSSI");
+            System.out.println("Test RandomMove 1 : REUSSI");
        }else{
-            System.out.println("Test Case 1 : ECHEC");
+            System.out.println("Test RandomMove 1 : ECHEC");
        }
-       // Test Case 2
+       // Test RandomMove 2
        Grille grilleCase2 = new Grille(2,2);
        grilleCase2.getGrille()[0][0].setStatut(1);
        grilleCase2.getGrille()[1][0].setStatut(0);
@@ -96,12 +96,12 @@ public class NewMainTest {
        if(grilleCase2.getGrille()[pointRandomAI.getRangee()][pointRandomAI.getColonne()].getStatut() == 0){
            if(pointRandomAI.getRangee() == 1 
                    && pointRandomAI.getColonne() == 0){
-               System.out.println("Test Case 2 : REUSSI");
+               System.out.println("Test RandomMove 2 : REUSSI");
            }else{
-               System.out.println("Test Case 2 : ECHEC");
+               System.out.println("Test RandomMove 2 : ECHEC");
            }
        }else{
-           System.out.println("Test Case 2 : ECHEC");
+           System.out.println("Test RandomMove 2 : ECHEC");
        } 
        
        // Test Placer Bateau AI - Preparation de grille test
@@ -179,11 +179,28 @@ public class NewMainTest {
                 );
           
         }
-       
+        
+        // Test makeMiniMaxMove
+        AI testDifficile = new AI(1);
+        Grille grille = new Grille(5, 5);
+        for(int i = 0; i < grille.getRangees(); i++){
+            for( int j = 0; j < grille.getColonnes(); j++){
+                if( (i == 0 && j == 0) || (i==2 && j==3) || (i==3&&j==3) || (i==3&&j==0) ){
+                    grille.getGrille()[i][j].setStatut(2);
+                    
+                }
+            }
+        }
+        Point pointChoisi = testDifficile.makeMove(grille);
+        System.out.print("Test makeMiniMaxMove() 1 --");
+        System.out.println("Point : (" + pointChoisi.getRangee() + ", " + pointChoisi.getColonne() + ")");
+        
+   
+      
    }
    
    public static void testCase(){
-       
+      
        System.out.println("\n------------TEST CASE---------------\n");
        // Test Adjacence 1
        Grille grilleTest = new Grille(4,4);

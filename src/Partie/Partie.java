@@ -30,6 +30,14 @@ public class Partie {
     }
     
     // Constructeur par attributs
+    public Partie(String nom, int niveau) {
+        this.etat = 0;
+        this.tempsPartie = 0;
+        this.historique = new ArrayList<>();
+        this.j1 = new Joueur(nom);
+        this.j2 = new Joueur(niveau);
+    }
+    
     public Partie(int etat, long tempsPartie, ArrayList<Tour> historique, Joueur j1, Joueur j2){
         this.etat = etat;
         this.tempsPartie = tempsPartie;
@@ -39,16 +47,6 @@ public class Partie {
     }
     
     // Methodes de classe
-    
-    /**
-     * Permet de lancer les deux phases de la partie
-     *  -Phase 1: Placer les bateaux
-     *  -Phase 2: Debuter la partie
-     */
-    public void initPartie(){
-        preparationPartie();
-        jouerPartie();
-    }
     
     /**
      * Places les bateaux du joueur humain et du joueur artificiel

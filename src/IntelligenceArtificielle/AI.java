@@ -62,53 +62,15 @@ public class AI extends Joueur {
      * @return Case
      */
     public Point makeMiniMaxMove(Grille grille) {
-        Map<Point, Integer> pointsTouches = new HashMap<>();
-        ArrayList 
-        if( > 0){
-            int choixCasesPotentielles = ThreadLocalRandom.current().nextInt(0,casesPotentielles.size());
-            int rangee = casesPotentielles.get(choixCasesPotentielles).getPoint().getRangee();
-            int colonne = casesPotentielles.get(choixCasesPotentielles).getPoint().getColonne();
-            int directionProchaineCase;
-            boolean neSatisfaitPasCondition;
-            do{               
-                neSatisfaitPasCondition = false;
-                directionProchaineCase = ThreadLocalRandom.current().nextInt(0, casesPotentielles.size());
-                switch (directionProchaineCase) {
-                    case 0:
-                        // haut
-                        if(rangee > 0){
-                            rangee -= 1;
-                        } else {
-                            neSatisfaitPasCondition = true;
-                        }   break;
-                    case 1:
-                        // droite
-                        if(colonne > 0){
-                            colonne += 1;
-                        } else {
-                            neSatisfaitPasCondition = true;
-                        }   break;
-                    case 2:
-                        // bas
-                        if(rangee > 0){
-                            rangee += 1;
-                        } else {
-                            neSatisfaitPasCondition = true;
-                        }   break;
-                    case 3:
-                        // gauche
-                        if(colonne > 0){
-                            colonne -= 1;
-                        } else {
-                            neSatisfaitPasCondition = true;
-                        }   break;
-                    default:
-                        break;
-                }
-            }while(neSatisfaitPasCondition);
-            
-            return new Point(rangee, colonne);
-            
+        ArrayList<Point> pointsTouches = new ArrayList<>();
+        ArrayList<Point> coupsPossibles = new ArrayList<>();
+        // 1. Reconnaissance
+        pointsTouches = reconnaissanceGrille(grille);
+        // 2. Coups possibles 
+        coupsPossibles = determinerCoupsPossibles(pointsTouches, grille);
+        // 3. Effectue un choix aleatoire
+        if(coupsPossibles.size() > 0){
+            return coupsPossibles.get(ThreadLocalRandom.current().nextInt(0, coupsPossibles.size()));
         }else{
             return makeRandomMove(grille);
         }
@@ -133,10 +95,77 @@ public class AI extends Joueur {
         }
     }
     
+    /**
+     * Cherche la grille pour toutes les cases de bateaux touches
+     * et retourne la liste
+     * 
+     * @param grille
+     * @return ArrayList<Point>
+     */
+    public ArrayList<Point> reconnaissanceGrille(Grille grille){
+        ArrayList<Point> pointsTouches = new ArrayList<>();
+        for(int i = 0; i < grille.getRangees(); i++){
+            for(int j = 0; j < grille.getColonnes(); j++){
+                if(grille.getGrille()[i][j].getStatut() == 2){
+                    pointsTouches.add(new Point(i, j));
+                }
+            }
+        }
+        return pointsTouches;
+    }
     
+    /**
+     * Genere une liste de points possibles a partir des points touches
+     * 
+     * @param pointsTouches
+     * @return ArrayList<Point>
+     */
+    public ArrayList<Point> determinerCoupsPossibles(ArrayList<Point> pointsTouches, Grille grille){
+        ArrayList<Point> coupsPossibles = new ArrayList<>();
+        for(int i = 0; i < pointsTouches.size(); i++){
+            //Verification Case du Haut
+            if(pointsTouches.get(i).getRangee() -1 > 0 ){
+                if(grille.getGrille()[pointsTouches.get(i).getRangee()-1][pointsTouches.get(i).getColonne()].getStatut() != 2){
+                    coupsPossibles.add(new Point(pointsTouches.get(i).getRangee() - 1, pointsTouches.get(i).getColonne()));
+                }    
+            }
+            // Verification Case du Bas
+            if( pointsTouches.get(i).getRangee() +1 < grille.getRangees()){
+                if(grille.getGrille()[pointsTouches.get(i).getRangee()+1][pointsTouches.get(i).getColonne()].getStatut() != 2){
+                    coupsPossibles.add(new Point(pointsTouches.get(i).getRangee() + 1, pointsTouches.get(i).getColonne()));
+                }
+            }
+            //Verification Case de Gauche
+            if(pointsTouches.get(i).getColonne() -1 > 0){
+                if(grille.getGrille()[pointsTouches.get(i).getRangee()][pointsTouches.get(i).getColonne()-1].getStatut() != 2){
+                    coupsPossibles.add(new Point(pointsTouches.get(i).getRangee(), pointsTouches.get(i).getColonne() - 1));
+                }
+            }
+            // Verification Case du Droite
+            if( pointsTouches.get(i).getColonne() +1 < grille.getColonnes()){
+                if(grille.getGrille()[pointsTouches.get(i).getRangee()][pointsTouches.get(i).getColonne()+1].getStatut() != 2){
+                    coupsPossibles.add(new Point(pointsTouches.get(i).getRangee(), pointsTouches.get(i).getColonne() + 1));
+                }
+            }
+        }
+        
+        
+        return coupsPossibles;
+    }
+    
+    
+    
+    
+    /**
+     * Place les bateaux de l'intelligence artificielle de facon aleatoire
+     * 
+     * @param grille
+     * @param numCases
+     * @return Map<Point, Integer>
+     */
     public Map<Point, Integer> placerBateau(Grille grille, int numCases){
         Point point = new Point(-1,-1);
-        Point nouvPoint = new Point(-1, -1);
+        Point nouvPoint;
         Map<Point, Integer> pointsBateau = new HashMap<>() ;
         
         // Determine dans quel sens seront les cases suivants la case aleatoire initiale

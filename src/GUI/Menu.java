@@ -65,18 +65,6 @@ public class Menu {
     }
     
     /**
-     * Debute une partie contre un adversaire selon le type de partie demande
-     * 
-     *  typePartie(1) : Joueur contre intelligence artificielle de bas niveau 
-     *  typePartie(2) : Joueur contre intelligence artificielle de haut niveau
-     * 
-     * @param typePartie 
-     */
-    public void debuterPartie(int typePartie){
-        
-    }
-    
-    /**
      * Le joueur en attribut declare forfait
      * 
      * @param joueur

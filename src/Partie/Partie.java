@@ -8,8 +8,6 @@ package Partie;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-import GUI.Case;
-
 /**
  *
  * @author arnaud
@@ -17,7 +15,7 @@ import GUI.Case;
 public class Partie {
     
     private int etat; // O: En cours 1: Termine
-    private double tempsPartie;
+    private long tempsPartie;
     private ArrayList<Tour> historique;
     private Joueur j1; // Human
     private Joueur j2; // AI
@@ -25,14 +23,14 @@ public class Partie {
     // Constructeur par defaut
     public Partie() {
         this.etat = 0;
-        this.tempsPartie = 0.0;
-        this.historique = new ArrayList<Tour>();
+        this.tempsPartie = 0;
+        this.historique = new ArrayList<>();
         this.j1 = new Joueur("LORDPET");
         this.j2 = new Joueur(0);
     }
     
     // Constructeur par attributs
-    public Partie(int etat, double tempsPartie, ArrayList<Tour> historique, Joueur j1, Joueur j2){
+    public Partie(int etat, long tempsPartie, ArrayList<Tour> historique, Joueur j1, Joueur j2){
         this.etat = etat;
         this.tempsPartie = tempsPartie;
         this.historique = historique;
@@ -59,23 +57,19 @@ public class Partie {
         // J1 - Place ses bateaux
         
         // J2 - Place ses bateaux
-        ArrayList<Case> casesNavire0 = j2.getAI().placerBateau(j2.getGrilleJoueur(), 2);
-        j2.placerBateau(j2.getGrilleJoueur(), 0, casesNavire0);
-        ArrayList<Case> casesNavire1 = j2.getAI().placerBateau(j2.getGrilleJoueur(), 3);
-        j2.placerBateau(j2.getGrilleJoueur(), 1, casesNavire1);
-        ArrayList<Case> casesNavire2 = j2.getAI().placerBateau(j2.getGrilleJoueur(), 3);
-        j2.placerBateau(j2.getGrilleJoueur(), 2, casesNavire2);
-        ArrayList<Case> casesNavire3 = j2.getAI().placerBateau(j2.getGrilleJoueur(), 4);
-        j2.placerBateau(j2.getGrilleJoueur(), 3, casesNavire3);
-        ArrayList<Case> casesNavire4 = j2.getAI().placerBateau(j2.getGrilleJoueur(), 5);
-        j2.placerBateau(j2.getGrilleJoueur(), 4, casesNavire4);
+        j2.placerBateau(0, j2.getAI().placerBateau(j2.getGrilleJoueur(), 2));
+        j2.placerBateau(1, j2.getAI().placerBateau(j2.getGrilleJoueur(), 3));
+        j2.placerBateau(2, j2.getAI().placerBateau(j2.getGrilleJoueur(), 3));
+        j2.placerBateau(3, j2.getAI().placerBateau(j2.getGrilleJoueur(), 4));
+        j2.placerBateau(4, j2.getAI().placerBateau(j2.getGrilleJoueur(), 5));
     }
     
     /**
      * La partie commence:
      *  -Le premier joueur a jouer est choisi au hasard
      */
-    public void jouerPartie(){        
+    public void jouerPartie(){   
+        tempsPartie = System.currentTimeMillis();
         Tour tour;
         int joueurAJouer = ThreadLocalRandom.current().nextInt(0, 2);  // choisit joueur a commencer de facon aleatoire
         
@@ -91,11 +85,31 @@ public class Partie {
            // Alterne le joueur a jouer
            joueurAJouer++;
            joueurAJouer%=2;
+        } 
+        
+        // *** FIN DE PARTIE *** 
+        // CALCUL DU TEMPS
+        long tempsPartieFin = System.currentTimeMillis();
+        long secondes = (tempsPartieFin - tempsPartie)/1000; // Le Temps de la partie en secondes
+        long minutes = 0;
+        long heures = 0;
+        // Duree de Plus d'une minute
+        if(secondes%60 > 0){
+            minutes = secondes/60;      // Nombre de minutes
+            secondes %= 60;             // Secondes restantes
+            
+        }
+        // Duree de Plus d'une heure
+        if(minutes%60 > 0){
+            heures = minutes/60;
+            minutes %= 60;
         }
     }  
     
     /**
      * Evalue si la partie est terminee
+     * 
+     * @return boolean
      */
     public boolean partieEstTerminee(){
         if(j1.estGagnant(j2.getGrilleJoueur())){
@@ -104,11 +118,7 @@ public class Partie {
         if(j2.estGagnant(j1.getGrilleJoueur())){
            etat = 1;
         }
-        if(etat == 1){
-            return true;
-        } else {
-            return false;
-        }
+        return etat == 1;
     }
     
     
@@ -131,14 +141,14 @@ public class Partie {
     
     // Getters
     public int getEtat() { return etat; }
-    public double getTempsPartie() { return tempsPartie; }
+    public long getTempsPartie() { return tempsPartie; }
     public ArrayList<Tour> getHistorique() { return historique; }
     public Joueur getJ1() { return j1; }
     public Joueur getJ2() { return j2; }
     
     // Setters
     public void setEtat(int etat) { this.etat = etat; }
-    public void setTempsPartie(double tempsPartie) { this.tempsPartie = tempsPartie; }
+    public void setTempsPartie(long tempsPartie) { this.tempsPartie = tempsPartie; }
     public void setHistorique(ArrayList<Tour> historique) { this.historique = historique; }
     public void setJ1(Joueur j1) { this.j1 = j1; }
     public void setJ2(Joueur j2) { this.j2 = j2; }

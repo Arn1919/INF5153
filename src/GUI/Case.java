@@ -1,11 +1,12 @@
 
 package GUI;
 
+import Partie.Point;
+
 public class Case {
 
   private int statut; // 0:Vide 1:Occupe par bateau 2:Touche 3:Ratee
-  private int rangee;
-  private int colonne;
+  private Point point;
 
   // Constructeur par défaut
   public Case(){
@@ -13,16 +14,14 @@ public class Case {
   }
   
   // Constructeur par attributs incomplets
-  public Case(int rangee, int colonne){
+  public Case(Point point){
       this.statut = 0;
-      this.rangee = rangee;
-      this.colonne = colonne;
+      this.point = point;
   }
   // Constructeur par attributs complets
-  public Case(int statut, int rangee, int colonne){
+  public Case(int statut, Point point){
     this.statut = statut;
-    this.rangee = rangee;
-    this.colonne = colonne;
+    this.point = point;
   }
   //Methodes de classes
   /**
@@ -35,13 +34,15 @@ public class Case {
   public boolean sontAdjacentes(Case c2){
       boolean verite = false;
       // Si c1 et c2 sont sur la meme rangee
-      if(this.rangee == c2.getRangee() ){
-          if( this.colonne == c2.getColonne()-1 || this.colonne == c2.getColonne()+1){
+      if(this.point.getRangee() == c2.getPoint().getRangee() ){
+          if( this.point.getColonne() == c2.getPoint().getColonne()-1 
+                  || this.getPoint().getColonne() == c2.getPoint().getColonne()+1){
               verite = true;
           }
       // Si c1 et c2 ne sont pas sur la meme rangee
-      }else if(this.rangee == c2.getRangee()-1 || this.rangee == c2.getRangee()+1){
-          if( this.colonne == c2.getColonne()){
+      }else if(this.getPoint().getRangee() == c2.getPoint().getRangee()-1
+                  || this.getPoint().getRangee() == c2.getPoint().getRangee()+1){
+          if( this.getPoint().getColonne() == c2.getPoint().getColonne()){
               verite = true;
           }
       }      
@@ -49,7 +50,8 @@ public class Case {
   }
   
   public boolean estIdentiquementSituee(Case autreCase){
-      if(this.rangee == autreCase.getRangee() && this.colonne == autreCase.getColonne()){
+      if(this.getPoint().getRangee() == autreCase.getPoint().getRangee() 
+              && this.getPoint().getColonne() == autreCase.getPoint().getColonne()){
           return true;
       }else{
           return false;
@@ -58,11 +60,9 @@ public class Case {
   
   // Getters
   public int getStatut() { return statut; }
-  public int getRangee() { return rangee; }
-  public int getColonne() { return colonne; }
+  public Point getPoint() { return point; }
   // Setters
   public void setStatut(int statut) { this.statut = statut; }
-  public void setRangee(int rangee) { this.rangee = rangee; }
-  public void setColonne(int colonne) { this.colonne = colonne; }
+  public void setPoint(Point point) { this.point = point; }
 
 }

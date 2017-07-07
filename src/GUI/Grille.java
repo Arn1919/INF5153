@@ -1,6 +1,7 @@
 package GUI;
 
 import Modeles.Navire;
+import Partie.Point;
 
 import java.util.ArrayList;
 
@@ -22,11 +23,11 @@ public class Grille{
         this.grille = new Case[NUM_RANGEES][NUM_COLONNES];
         for(int i = 0; i < NUM_RANGEES; i++){
             for(int j = 0; j < NUM_COLONNES; j++){
-                this.grille[i][j] = new Case(i, j);
+                this.grille[i][j] = new Case(new Point(i, j));
             }
         }
         // Initialisation des navires
-        this.navires = new ArrayList<Navire>();
+        this.navires = new ArrayList<>();
         this.navires.add(new Navire(0, 2));
         this.navires.add(new Navire(0, 3));
         this.navires.add(new Navire(0, 3));
@@ -41,7 +42,7 @@ public class Grille{
         this.grille = new Case[rangees][colonnes];
         for(int i = 0; i < rangees; i++){
             for(int j = 0; j < colonnes; j++){
-                this.grille[i][j] = new Case(i, j);
+                this.grille[i][j] = new Case(new Point(i, j));
             }
         }
     }

@@ -16,7 +16,7 @@ public class Tour {
     
     private int resultat; // 0:Le coup a rater 1:Le coup a touche 2:Le coup a touche-coule
     private int joueur;
-    private Case action;
+    private Point action;
     
     // Constructeur par defaut
     public Tour(){
@@ -24,13 +24,14 @@ public class Tour {
     }
     
     // Constructeur par attributs incomplets
-    public Tour(int joueur, Case action){
+    public Tour(int joueur, Point action){
         this.joueur = joueur;
         this.action = action;
+        this.resultat = -1;
     }
     
     // Constructeur par attributs complets
-    public Tour(int resultat, int joueur, Case action){
+    public Tour(int resultat, int joueur, Point action){
         this.resultat = resultat;
         this.joueur = joueur;
         this.action = action;
@@ -49,28 +50,37 @@ public class Tour {
     /**
      * Applique l'action a la grille entre en attribut
      * 
-     * @param grille 
+     * @param grilleAdversaire
+     * @param grilleEssai 
      */
-    public void appliquerTour(Grille grille) {
+    public void appliquerTour(Grille grilleAdversaire, Grille grilleEssai) {
+        
+       // MAJ GrilleEssai
        
-       int statutCase = grille.getGrille()[action.getRangee()][action.getColonne()].getStatut();
-       
+       int statutCase = grilleAdversaire.getGrille()[action.getRangee()][action.getColonne()].getStatut();
+       //System.out.println("TEST: ADAVDVAD");
        if( statutCase == 1 ){ // La case est occupee par un bateau, non touchee
-            grille.getGrille()[action.getRangee()][action.getColonne()].setStatut(2); // MAJ Statut Case de Grille
-            for(int i = 0; i < grille.getNavires().size(); i++){
-                for(int j = 0; j < grille.getNavires().get(i).getCases().size(); j++){
-                    if(action.estIdentiquementSituee(grille.getNavires().get(i).getCases().get(j))){
-                        grille.getNavires().get(i).getCases().get(j).setStatut(2); // MAJ Statut Case du Navire
-                        if(grille.getNavires().get(i).estToucheCoule()){
-                            resultat = 2;
+            // MAJ Statut de la Case de la Grille
+            grilleAdversaire.getGrille()[action.getRangee()][action.getColonne()].setStatut(2); // Grille Adversaire
+            grilleEssai.getGrille()[action.getRangee()][action.getColonne()].setStatut(2); // Grille Essaie du joueur
+            for(int i = 0; i < grilleAdversaire.getNavires().size(); i++){   
+                    //System.out.println("TEST: " + grilleAdversaire.getNavires().get(i).getPointsGrille().containsKey(action));
+                    if(grilleAdversaire.getNavires().get(i).getPointsGrille().containsKey(action)){
+                        // MAJ Statut de la Case du Navire
+                        grilleAdversaire.getNavires().get(i).getPointsGrille().replace(action, 2); 
+                        if(grilleAdversaire.getNavires().get(i).estToucheCoule()){
+                            grilleAdversaire.getNavires().get(i).setEtatNavire(1); // Le navire est coule
+                            resultat = 2; // C'est un touche-coule
                         }else{
                             resultat = 1;
                         }
                     }
-                }
+                
             }                        
        }else if ( statutCase == 0 ){ // La case est vide
-            grille.getGrille()[action.getRangee()][action.getColonne()].setStatut(3); // MAJ Statut Case de Grille 
+            // MAJ Statut de la Case
+            grilleAdversaire.getGrille()[action.getRangee()][action.getColonne()].setStatut(3); // Grille de l'adversaire
+            grilleEssai.getGrille()[action.getRangee()][action.getColonne()].setStatut(3);     // Grille d'essai du joueur
             resultat = 0;
        }
     }    
@@ -78,11 +88,11 @@ public class Tour {
     // Getters
     public int getResultat() { return resultat; }
     public int getJoueur() { return joueur; }
-    public Case getAction() { return action; }
+    public Point getAction() { return action; }
     
     // Setters
     public void setResultat(int resultat) { this.resultat = resultat; }
     public void setJoueur(int joueur) { this.joueur = joueur; }
-    public void setAction(Case action) { this.action = action; }
+    public void setAction(Point action) { this.action = action; }
  
 }

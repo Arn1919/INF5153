@@ -7,10 +7,11 @@ package Partie;
 
 import GUI.Grille;
 import GUI.Case;
-import Modeles.Navire;
 import IntelligenceArtificielle.AI;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  *
@@ -61,8 +62,8 @@ public class Joueur {
      * 
      * @return Case
      */
-    public Case makeMove(){
-        return new Case();
+    public Point makeMove(){
+        return new Point();
     }
     
     /**
@@ -75,17 +76,13 @@ public class Joueur {
         return false;
     }
     /**
-     * Place le bateau dans la grille selon les cases specifiees
+     * Place le bateau dans la grille selon les points specifiees
      * 
-     * @param grilleJoueur
      * @param numBateau
-     * @param cases
+     * @param pointsNavire
      */
-    public void placerBateau(Grille grilleJoueur, int numBateau, ArrayList<Case> cases){       
-        grilleJoueur.getNavires().get(numBateau).setCases(cases);
-        for(int i = 0; i < cases.size(); i++){
-            grilleJoueur.getGrille()[cases.get(i).getRangee()][cases.get(i).getColonne()].setStatut(1);
-        }
+    public void placerBateau(int numBateau, Map<Point, Integer> pointsNavire ){       
+        grilleJoueur.getNavires().get(numBateau).setPointsGrille(pointsNavire);
     }
     
     // Getters
@@ -95,9 +92,9 @@ public class Joueur {
     public AI getAI() { return ai; }
     
     // Setters 
-    public void setNom() { this.nom = nom; }
-    public void setGrilleJoueur() { this.grilleJoueur = grilleJoueur; }
-    public void setGrilleEnnemi() { this.grilleEnnemi = grilleEnnemi; }
-    public void setAI() { this.ai = ai; }
+    public void setNom(String nom) { this.nom = nom; }
+    public void setGrilleJoueur(Grille grilleJoueur) { this.grilleJoueur = grilleJoueur; }
+    public void setGrilleEnnemi(Grille grilleEnnemi) { this.grilleEnnemi = grilleEnnemi; }
+    public void setAI(AI ai) { this.ai = ai; }
     
 }

@@ -16,25 +16,10 @@ public class Grille{
     private ArrayList<Navire> navires;
     
     // Constructeur par defaut
-    public Grille(){
-        this.colonnes = NUM_COLONNES;
-        this.rangees = NUM_RANGEES;
-        // Initialisation de la grille
-        this.grille = new Case[NUM_RANGEES][NUM_COLONNES];
-        for(int i = 0; i < NUM_RANGEES; i++){
-            for(int j = 0; j < NUM_COLONNES; j++){
-                this.grille[i][j] = new Case(new Point(i, j));
-            }
-        }
-        // Initialisation des navires
-        this.navires = new ArrayList<>();
-        this.navires.add(new Navire(0, 2));
-        this.navires.add(new Navire(0, 3));
-        this.navires.add(new Navire(0, 3));
-        this.navires.add(new Navire(0, 4));
-        this.navires.add(new Navire(0, 5));    
+    public Grille(){    
  
     }
+    
     // Constructeur par attributs incomplets
     public Grille( int colonnes, int rangees){
         this.colonnes = colonnes;

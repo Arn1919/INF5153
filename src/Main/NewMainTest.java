@@ -10,7 +10,6 @@ import IntelligenceArtificielle.*;
 import Modeles.*;
 import Partie.*;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,12 +24,13 @@ public class NewMainTest {
      */
     public static void main(String[] args) {
         // TODO
-        //testGrille();
-        //testCase();
+        testGrille();
+        testCase();
         testAI();
-        //testPartie();
-        //testNavire();
-        //testTour();
+        testPartie();
+        testNavire();
+        testTour();
+        //testMenu();
     }
     
     /**
@@ -74,11 +74,11 @@ public class NewMainTest {
        
        System.out.println("\n------------TEST AI---------------\n");
        // FACILE
-       AI testFacile = new AI(0);
+       AIAleatoire testFacile = new AIAleatoire();
        Iterator<Map.Entry<Point, Integer>> it ;
        // Test RandomMove 1
        Grille grilleCase1 = new Grille();
-       Point pointRandom = testFacile.makeMove(grilleCase1);
+       Point pointRandom = testFacile.makeRandomMove(grilleCase1);
        if(grilleCase1.getGrille()[pointRandom.getRangee()][pointRandom.getColonne()].getStatut() == 0){
             System.out.println("Test RandomMove 1 : REUSSI");
        }else{
@@ -91,7 +91,7 @@ public class NewMainTest {
        grilleCase2.getGrille()[0][1].setStatut(1);
        grilleCase2.getGrille()[1][1].setStatut(1);
        
-       Point pointRandomAI = testFacile.makeMove(grilleCase2);
+       Point pointRandomAI = testFacile.makeRandomMove(grilleCase2);
        
        if(grilleCase2.getGrille()[pointRandomAI.getRangee()][pointRandomAI.getColonne()].getStatut() == 0){
            if(pointRandomAI.getRangee() == 1 
@@ -181,7 +181,7 @@ public class NewMainTest {
         }
         
         // Test makeMiniMaxMove
-        AI testDifficile = new AI(1);
+        AIMiniMax testDifficile = new AIMiniMax();
         Grille grille = new Grille(5, 5);
         for(int i = 0; i < grille.getRangees(); i++){
             for( int j = 0; j < grille.getColonnes(); j++){
@@ -191,7 +191,7 @@ public class NewMainTest {
                 }
             }
         }
-        Point pointChoisi = testDifficile.makeMove(grille);
+        Point pointChoisi = testDifficile.makeMiniMaxMove(grille);
         System.out.print("Test makeMiniMaxMove() 1 --");
         System.out.println("Point : (" + pointChoisi.getRangee() + ", " + pointChoisi.getColonne() + ")");
         
@@ -294,9 +294,12 @@ public class NewMainTest {
                   + entree.getKey().getRangee()
                   + " C"
                   + entree.getKey().getColonne()
-                );
-          
+                );         
       }
+      
+      
+      // Test partieEstGagnee()
+      
     }
    
     public static void testNavire(){
@@ -516,7 +519,21 @@ public class NewMainTest {
             System.out.print(" R" + test5.getAction().getRangee() + "C" + test5.getAction().getColonne());
             System.out.println(" Statut: " + grille1.getGrille()[test5.getAction().getRangee()][test5.getAction().getColonne()].getStatut());
        }
-       
-       
    }
+       
+    /**
+     *
+     */
+    public static void testMenu(){
+           
+        System.out.println("\n------------TEST MENU---------------\n"); 
+        // Test fonction sauvegarder()
+           Menu testMenu = new Menu();
+           Partie testPartie = new Partie("NomJoueur", 0);
+           testPartie.preparationPartie();
+           testMenu.sauvegarderPartie(testPartie);
+           
+    }
 }
+
+

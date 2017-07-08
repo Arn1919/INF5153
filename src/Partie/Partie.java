@@ -25,7 +25,7 @@ public class Partie {
         this.etat = 0;
         this.tempsPartie = 0;
         this.historique = new ArrayList<>();
-        this.j1 = new Joueur("LORDPET");
+        this.j1 = new Joueur();
         this.j2 = new Joueur(0);
     }
     
@@ -70,7 +70,7 @@ public class Partie {
         tempsPartie = System.currentTimeMillis();
         Tour tour;
         int joueurAJouer = ThreadLocalRandom.current().nextInt(0, 2);  // choisit joueur a commencer de facon aleatoire
-        
+        /**
         while(partieEstTerminee()){ // Tant que partie n'est pas terminer
            // Le joueur a jouer effectue son tour
             if(joueurAJouer == 0){
@@ -84,7 +84,7 @@ public class Partie {
            joueurAJouer++;
            joueurAJouer%=2;
         } 
-        
+        */
         // *** FIN DE PARTIE *** 
         // CALCUL DU TEMPS
         long tempsPartieFin = System.currentTimeMillis();

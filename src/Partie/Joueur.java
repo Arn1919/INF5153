@@ -6,10 +6,8 @@
 package Partie;
 
 import GUI.Grille;
-import GUI.Case;
 import IntelligenceArtificielle.AI;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -43,7 +41,7 @@ public class Joueur {
         }else{
             this.nom = "Skynet";
         }
-        this.ai = new AI(niveauIntelligenceArtificielle);
+        this.ai = new AI().getAI(niveauIntelligenceArtificielle);
         this.grilleJoueur = new Grille();
         this.grilleEnnemi = new Grille();
     }
@@ -54,16 +52,6 @@ public class Joueur {
         this.grilleJoueur = grilleJoueur;
         this.grilleEnnemi = grilleEnnemi;
         this.ai = ai;
-    }
-    
-    // Methodes de classe
-    /**
-     * Retourne la case choisie par l'humain
-     * 
-     * @return Case
-     */
-    public Point makeMove(){
-        return new Point();
     }
     
     /**

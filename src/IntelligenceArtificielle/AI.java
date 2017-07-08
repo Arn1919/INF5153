@@ -6,163 +6,43 @@
 package IntelligenceArtificielle;
 
 import GUI.Grille;
-import GUI.Case;
 import Partie.Point;
-import Partie.Joueur;
-
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+
 /**
  *
  * @author arnaud
  */
-public class AI extends Joueur {
-    
-    // NIVEAU FACILE : 0
-    // NIVEAU DIFFICILE : 1
-    private int niveauDifficulte; 
-    
-    
-    // Constructeur par defaut
-    public AI() {
-        
-    }
-    
-    // Constructeur par attributs
-    public AI(int niveauDifficulte){
-        this.niveauDifficulte = niveauDifficulte;
-    }
-    
-    // Methodes de classes
+public class AI implements AIFactory {
     
     /**
-     * Choisit une case aleatoire non-choisit de la grille en attribut
+     * Definit le type d'AI selon le parametre niveau
      * 
-     * @param grille
-     * @return Case 
+     * @param niveau
+     * @return instance AIAleatoire ou AIMiniMax
      */
-    public Point makeRandomMove(Grille grille){
-        int rangeeAleatoire;
-        int colonneAleatoire;
-        // Cherche aleatoirement une case non choisie dans la grille
-        do{
-            colonneAleatoire = ThreadLocalRandom.current().nextInt(0, grille.getColonnes());
-            rangeeAleatoire = ThreadLocalRandom.current().nextInt(0, grille.getRangees());
-        }while(grille.getGrille()[rangeeAleatoire][colonneAleatoire].getStatut() != 0);
-        // Retourne la case non choisie
-        return grille.getGrille()[rangeeAleatoire][colonneAleatoire].getPoint();
-    }
-    
-    /**
-     * Choisit une case non-choisit de la grille en attribut selon l'algorithme mini-max
-     * 
-     * @param grille
-     * @return Case
-     */
-    public Point makeMiniMaxMove(Grille grille) {
-        ArrayList<Point> pointsTouches = new ArrayList<>();
-        ArrayList<Point> coupsPossibles = new ArrayList<>();
-        // 1. Reconnaissance
-        pointsTouches = reconnaissanceGrille(grille);
-        // 2. Coups possibles 
-        coupsPossibles = determinerCoupsPossibles(pointsTouches, grille);
-        // 3. Effectue un choix aleatoire
-        if(coupsPossibles.size() > 0){
-            return coupsPossibles.get(ThreadLocalRandom.current().nextInt(0, coupsPossibles.size()));
-        }else{
-            return makeRandomMove(grille);
+    @Override
+    public AI getAI(int niveau) {
+        switch (niveau) {
+            case 0 : 
+                return new AIAleatoire();
+            case 1 : 
+                return new AIMiniMax();
+            default :
+                throw new IllegalArgumentException("Difficulte inconnue");
         }
     }
     
-    
-    /**
-     * Decide du type de coup de l'intelligence artificielle selon son niveau de 
-     * difficulte
-     * 
-     * Retourne la case choisie ensuite.
-     * 
-     * @param grille
-     * @return Case
-     */
-    public Point makeMove(Grille grille){
-        
-        if(this.niveauDifficulte == 0){ // Si Niveau difficulte facile
-            return makeRandomMove(grille);       
-        }else{                          // Si Niveau difficulte eleve
-            return makeMiniMaxMove(grille);
-        }
-    }
-    
-    /**
-     * Cherche la grille pour toutes les cases de bateaux touches
-     * et retourne la liste
-     * 
-     * @param grille
-     * @return ArrayList<Point>
-     */
-    public ArrayList<Point> reconnaissanceGrille(Grille grille){
-        ArrayList<Point> pointsTouches = new ArrayList<>();
-        for(int i = 0; i < grille.getRangees(); i++){
-            for(int j = 0; j < grille.getColonnes(); j++){
-                if(grille.getGrille()[i][j].getStatut() == 2){
-                    pointsTouches.add(new Point(i, j));
-                }
-            }
-        }
-        return pointsTouches;
-    }
-    
-    /**
-     * Genere une liste de points possibles a partir des points touches
-     * 
-     * @param pointsTouches
-     * @return ArrayList<Point>
-     */
-    public ArrayList<Point> determinerCoupsPossibles(ArrayList<Point> pointsTouches, Grille grille){
-        ArrayList<Point> coupsPossibles = new ArrayList<>();
-        for(int i = 0; i < pointsTouches.size(); i++){
-            //Verification Case du Haut
-            if(pointsTouches.get(i).getRangee() -1 > 0 ){
-                if(grille.getGrille()[pointsTouches.get(i).getRangee()-1][pointsTouches.get(i).getColonne()].getStatut() != 2){
-                    coupsPossibles.add(new Point(pointsTouches.get(i).getRangee() - 1, pointsTouches.get(i).getColonne()));
-                }    
-            }
-            // Verification Case du Bas
-            if( pointsTouches.get(i).getRangee() +1 < grille.getRangees()){
-                if(grille.getGrille()[pointsTouches.get(i).getRangee()+1][pointsTouches.get(i).getColonne()].getStatut() != 2){
-                    coupsPossibles.add(new Point(pointsTouches.get(i).getRangee() + 1, pointsTouches.get(i).getColonne()));
-                }
-            }
-            //Verification Case de Gauche
-            if(pointsTouches.get(i).getColonne() -1 > 0){
-                if(grille.getGrille()[pointsTouches.get(i).getRangee()][pointsTouches.get(i).getColonne()-1].getStatut() != 2){
-                    coupsPossibles.add(new Point(pointsTouches.get(i).getRangee(), pointsTouches.get(i).getColonne() - 1));
-                }
-            }
-            // Verification Case du Droite
-            if( pointsTouches.get(i).getColonne() +1 < grille.getColonnes()){
-                if(grille.getGrille()[pointsTouches.get(i).getRangee()][pointsTouches.get(i).getColonne()+1].getStatut() != 2){
-                    coupsPossibles.add(new Point(pointsTouches.get(i).getRangee(), pointsTouches.get(i).getColonne() + 1));
-                }
-            }
-        }
-        
-        
-        return coupsPossibles;
-    }
-    
-    
-    
-    
-    /**
+        /**
      * Place les bateaux de l'intelligence artificielle de facon aleatoire
      * 
      * @param grille
      * @param numCases
      * @return Map<Point, Integer>
      */
+    @Override
     public Map<Point, Integer> placerBateau(Grille grille, int numCases){
         Point point = new Point(-1,-1);
         Point nouvPoint;
@@ -173,7 +53,9 @@ public class AI extends Joueur {
         
         for(int i = 0; i < numCases; i++){
             if(i == 0 ){ // Premiere case est une case aleatoire
-                point = this.makeRandomMove(grille);
+                int x = ThreadLocalRandom.current().nextInt(0, grille.getRangees());
+                int y = ThreadLocalRandom.current().nextInt(0, grille.getColonnes());
+                point = new Point(x, y);
                 pointsBateau.put(point, 1);
                 directionBateau = ThreadLocalRandom.current().nextInt(0, 4);
             }else{ // Les cases suivantes du bateau
@@ -235,11 +117,5 @@ public class AI extends Joueur {
         
         return pointsBateau;
     }
-    
-    // Getters
-    public int getNiveauDifficulte() { return niveauDifficulte; }
-    
-    // Setters
-    public void setNiveauDifficulte(int niveauDifficulte) { this.niveauDifficulte = niveauDifficulte; }
     
 }

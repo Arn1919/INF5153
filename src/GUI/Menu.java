@@ -1,4 +1,4 @@
-package Jeu;
+package GUI;
 
 import Partie.Temps;
 import Partie.Partie;
@@ -40,19 +40,19 @@ public class Menu {
         
         try {
                 
-		File file = new File("src/Local_Storage/sauvegardes.xml");
-		JAXBContext jaxbContext = JAXBContext.newInstance(Partie.class);
-		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            File file = new File("src/Local_Storage/sauvegardes.xml");
+            JAXBContext jaxbContext = JAXBContext.newInstance(Partie.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-		// output pretty printed
-		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            // output pretty printed
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-		jaxbMarshaller.marshal(partie, file);
-		jaxbMarshaller.marshal(partie, System.out);
+            jaxbMarshaller.marshal(partie, file);
+            jaxbMarshaller.marshal(partie, System.out);
 
-	      } catch (JAXBException e) {
-		e.printStackTrace();
-	      }
+	} catch (JAXBException e) {
+            e.printStackTrace();
+	}
     }
     
     /**
